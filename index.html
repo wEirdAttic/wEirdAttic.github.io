@@ -3,17 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>开学倒计时 · 时空之门</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A6%3C/text%3E%3C/svg%3E">
+<title>乐赏 · 倒计时</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%8F%B3%3C/text%3E%3C/svg%3E">
 <style>
   :root {
-    --bg: #05060f;
-    --cyan: #00f0ff;
-    --magenta: #ff3ec8;
-    --violet: #a855f7;
-    --gold: #ffd166;
-    --text: #eef1ff;
-    --muted: #8b93b8;
+    --bg: #0a0a12;
+    --card: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.10);
+    --text: #f4f5f8;
+    --muted: #9aa0b5;
+    --accent1: #7c5cff;
+    --accent2: #3ea8ff;
+    --accent3: #ff5ec8;
+    --glow: rgba(124, 92, 255, 0.45);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -25,476 +27,337 @@
     background: var(--bg);
     color: var(--text);
     min-height: 100vh;
-    overflow-x: hidden;
-    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 40px 20px;
+    position: relative;
+    overflow-x: hidden;
   }
 
-  /* 深空底色 + 星云光晕（CSS 层） */
+  /* 背景光晕 */
   body::before {
     content: "";
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(45% 40% at 18% 15%, rgba(124, 58, 237, 0.28), transparent 60%),
-      radial-gradient(40% 45% at 82% 20%, rgba(0, 200, 255, 0.18), transparent 60%),
-      radial-gradient(50% 45% at 75% 85%, rgba(255, 62, 200, 0.16), transparent 60%),
-      radial-gradient(35% 35% at 25% 80%, rgba(168, 85, 247, 0.20), transparent 60%),
-      linear-gradient(180deg, #05060f 0%, #0a0b1e 50%, #05060f 100%);
+      radial-gradient(42% 38% at 20% 18%, rgba(124,92,255,0.30), transparent 62%),
+      radial-gradient(36% 40% at 82% 24%, rgba(62,168,255,0.20), transparent 62%),
+      radial-gradient(46% 42% at 72% 86%, rgba(255,94,200,0.18), transparent 62%);
     z-index: -2;
   }
-
-  /* 星空粒子画布 */
-  #stars { position: fixed; inset: 0; z-index: -1; pointer-events: none; }
-
-  /* 鼠标光晕（魔法感） */
-  .aura {
+  body::after {
+    content: "";
     position: fixed;
-    width: 520px; height: 520px;
-    margin: -260px 0 0 -260px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(124,100,255,0.20), rgba(0,240,255,0.08) 40%, transparent 70%);
-    pointer-events: none;
-    z-index: 0;
-    transform: translate(-300px, -300px);
-    transition: transform 0.25s ease-out;
-    mix-blend-mode: screen;
+    inset: 0;
+    background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+    background-size: 34px 34px;
+    z-index: -1;
+    opacity: 0.5;
+    mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent);
   }
 
   .wrap {
-    position: relative;
-    z-index: 1;
     width: 100%;
-    max-width: 860px;
+    max-width: 640px;
     text-align: center;
-    animation: rise 1.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: rise 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-
   @keyframes rise {
-    from { opacity: 0; transform: translateY(40px) scale(0.96); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
+    from { opacity: 0; transform: translateY(28px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
-  .eyebrow {
-    font-size: 13px;
-    letter-spacing: 0.6em;
-    text-indent: 0.6em;
-    color: var(--cyan);
-    text-shadow: 0 0 12px rgba(0,240,255,0.7);
-    margin-bottom: 18px;
-    animation: blink 3s ease-in-out infinite;
+  .badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: rgba(255,255,255,0.04);
+    font-size: 12px;
+    letter-spacing: 0.35em;
+    text-indent: 0.35em;
+    color: var(--muted);
+    margin-bottom: 26px;
   }
-
-  @keyframes blink { 0%,100%{opacity:.6} 50%{opacity:1} }
 
   .title {
-    font-size: clamp(30px, 7vw, 52px);
+    font-size: clamp(38px, 10vw, 64px);
     font-weight: 800;
-    letter-spacing: 0.12em;
-    background: linear-gradient(90deg, var(--cyan), var(--violet), var(--magenta));
+    letter-spacing: 0.18em;
+    text-indent: 0.18em;
+    background: linear-gradient(100deg, #a98bff, var(--accent2) 55%, #ff7ad6);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 0 18px rgba(168,85,247,0.55));
-    margin-bottom: 44px;
+    margin-bottom: 10px;
+  }
+
+  .subtitle {
+    font-size: 15px;
+    color: var(--muted);
+    letter-spacing: 0.12em;
+    margin-bottom: 46px;
   }
 
   .countdown {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    gap: clamp(6px, 2.5vw, 20px);
+    gap: clamp(8px, 3vw, 22px);
+    margin-bottom: 8px;
   }
-
-  .unit {
-    min-width: clamp(62px, 16vw, 120px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  .unit { display: flex; flex-direction: column; align-items: center; }
+  .card {
+    min-width: clamp(66px, 18vw, 108px);
+    padding: 20px 8px 16px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    box-shadow: 0 20px 50px rgba(0,0,0,0.35);
   }
-
   .number {
-    font-size: clamp(52px, 13vw, 100px);
-    font-weight: 800;
+    font-size: clamp(40px, 11vw, 68px);
+    font-weight: 700;
     line-height: 1;
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
-    animation: floaty 5s ease-in-out infinite;
+    background: linear-gradient(180deg, #ffffff, #b9c3ff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
-
-  @keyframes floaty { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-7px)} }
-
-  .number.d { color: var(--cyan);    text-shadow: 0 0 10px var(--cyan), 0 0 30px var(--cyan), 0 0 70px rgba(0,240,255,0.6); }
-  .number.h { color: var(--magenta); text-shadow: 0 0 10px var(--magenta), 0 0 30px var(--magenta), 0 0 70px rgba(255,62,200,0.6); animation-delay: 0.4s; }
-  .number.m { color: var(--violet);  text-shadow: 0 0 10px var(--violet), 0 0 30px var(--violet), 0 0 70px rgba(168,85,247,0.65); animation-delay: 0.8s; }
-  .number.s { color: var(--gold);    text-shadow: 0 0 8px var(--gold), 0 0 26px var(--gold), 0 0 60px rgba(255,209,102,0.7); animation-delay: 1.2s; }
-
-  .number.seconds { transition: transform 0.12s ease; }
-  .number.seconds.tick { transform: translateY(-6px) scale(1.06); }
-
+  .label {
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.25em;
+    text-indent: 0.25em;
+  }
   .sep {
-    font-size: clamp(40px, 10vw, 84px);
+    font-size: clamp(28px, 7vw, 44px);
     font-weight: 300;
     color: var(--muted);
     opacity: 0.35;
     line-height: 1;
     user-select: none;
-    animation: blink 2s ease-in-out infinite;
+    padding-top: 16px;
   }
-
-  .unit-name {
-    margin-top: 18px;
-    font-size: clamp(12px, 3.5vw, 15px);
-    color: var(--muted);
-    letter-spacing: 0.28em;
-    text-indent: 0.28em;
-  }
-
-  .precise {
-    margin-top: 26px;
-    font-size: clamp(13px, 3vw, 16px);
-    color: var(--cyan);
-    letter-spacing: 0.06em;
-    text-shadow: 0 0 10px rgba(0,240,255,0.5);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .progress {
-    max-width: 560px;
-    height: 8px;
-    margin: 30px auto 0;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.08);
-    overflow: hidden;
-    box-shadow: inset 0 0 8px rgba(0,0,0,0.6);
-  }
-
-  .bar {
-    height: 100%;
-    width: 0%;
-    border-radius: 999px;
-    background: linear-gradient(90deg, var(--cyan), var(--violet), var(--magenta));
-    box-shadow: 0 0 16px rgba(168,85,247,0.8);
-    transition: width 0.5s ease;
-  }
-
-  .progress-label {
-    margin-top: 12px;
-    font-size: 13px;
-    color: var(--muted);
-    letter-spacing: 0.12em;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .divider {
-    max-width: 300px;
-    height: 1px;
-    margin: 44px auto 30px;
-    background: linear-gradient(90deg, transparent, rgba(168,85,247,0.7), transparent);
-  }
-
-  .lore-title {
-    font-size: 13px;
-    letter-spacing: 0.4em;
-    text-indent: 0.4em;
-    color: var(--violet);
-    text-shadow: 0 0 10px rgba(168,85,247,0.6);
-    margin-bottom: 16px;
-  }
-
-  .lore {
-    min-height: 50px;
-    font-size: clamp(14px, 3.5vw, 17px);
-    line-height: 1.7;
-    color: #c9d0f0;
-    max-width: 620px;
-    margin: 0 auto;
-    transition: opacity 0.4s ease;
-  }
-
-  .params {
-    margin-top: 26px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 8px 28px;
-    font-size: 12px;
-    color: var(--muted);
-    font-variant-numeric: tabular-nums;
-  }
-  .params span b { color: #cdd6ff; font-weight: 600; }
 
   .target {
     margin-top: 30px;
     font-size: 13px;
     color: var(--muted);
-    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.04em;
   }
 
-  .finished {
-    display: none;
-    padding: 20px 0 10px;
+  .meeting {
+    margin: 34px auto 0;
+    max-width: 420px;
+    padding: 22px 24px;
+    border-radius: 20px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    text-align: left;
   }
-  .finished-title {
-    font-size: clamp(54px, 15vw, 120px);
-    font-weight: 900;
-    letter-spacing: 0.08em;
-    background: linear-gradient(90deg, var(--gold), var(--magenta), var(--cyan));
+  .meeting-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+  .meeting-head .dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #34d399;
+    box-shadow: 0 0 10px #34d399;
+  }
+  .meeting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 11px 0;
+    border-top: 1px solid rgba(255,255,255,0.06);
+    font-size: 15px;
+  }
+  .meeting-row .k { color: var(--muted); font-size: 13px; }
+  .meeting-row .v {
+    color: #e8ebff;
+    font-variant-numeric: tabular-nums;
+    cursor: pointer;
+    letter-spacing: 0.03em;
+  }
+  .meeting-row .v:hover { color: var(--accent2); }
+  .join {
+    display: block;
+    margin: 20px 0 0;
+    padding: 14px;
+    border-radius: 14px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    color: #fff;
+    background: linear-gradient(100deg, var(--accent1), var(--accent2));
+    box-shadow: 0 10px 30px var(--glow);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .join:hover { transform: translateY(-2px); box-shadow: 0 14px 40px var(--glow); }
+  .join:active { transform: translateY(0); }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 40px;
+    transform: translateX(-50%) translateY(20px);
+    padding: 10px 20px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(10px);
+    font-size: 13px;
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* 已开始状态 */
+  .finished { display: none; }
+  .finished-big {
+    font-size: clamp(44px, 12vw, 72px);
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    background: linear-gradient(100deg, #34d399, var(--accent2), #ff7ad6);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    filter: drop-shadow(0 0 30px rgba(255,209,102,0.6));
-    animation: pulse 1.4s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{filter:drop-shadow(0 0 18px rgba(255,209,102,0.5))} 50%{filter:drop-shadow(0 0 44px rgba(255,62,200,0.8))} }
-  .finished-sub {
-    margin-top: 16px;
-    font-size: clamp(14px, 3.5vw, 18px);
-    letter-spacing: 0.3em;
-    color: var(--cyan);
-    text-shadow: 0 0 12px rgba(0,240,255,0.6);
-  }
-
-  @media (max-width: 480px) {
-    .eyebrow { letter-spacing: 0.32em; text-indent: 0.32em; }
-    .title { margin-bottom: 30px; }
-    .aura { display: none; }
+    margin-bottom: 12px;
   }
 </style>
 </head>
 <body>
-  <canvas id="stars"></canvas>
-  <div class="aura" id="aura"></div>
-
   <main class="wrap">
-    <header>
-      <div class="eyebrow">✦ 时 空 之 门 已 锁 定 ✦</div>
-      <h1 class="title">开学倒计时</h1>
-    </header>
+    <div class="badge">等待开启</div>
+    <h1 class="title">乐赏</h1>
+    <p class="subtitle">距离开始还有</p>
 
-    <div class="countdown" id="countdown">
+    <div id="countdown" class="countdown">
       <div class="unit">
-        <span class="number d" id="d">0</span>
-        <span class="unit-name">天</span>
+        <div class="card"><div class="number" id="d">00</div><div class="label">天</div></div>
       </div>
       <span class="sep">:</span>
       <div class="unit">
-        <span class="number h" id="h">00</span>
-        <span class="unit-name">时</span>
+        <div class="card"><div class="number" id="h">00</div><div class="label">时</div></div>
       </div>
       <span class="sep">:</span>
       <div class="unit">
-        <span class="number m" id="m">00</span>
-        <span class="unit-name">分</span>
+        <div class="card"><div class="number" id="m">00</div><div class="label">分</div></div>
       </div>
       <span class="sep">:</span>
       <div class="unit">
-        <span class="number s seconds" id="s">00</span>
-        <span class="unit-name">秒</span>
+        <div class="card"><div class="number" id="s">00</div><div class="label">秒</div></div>
       </div>
     </div>
 
-    <p class="precise" id="precise"></p>
-
-    <div class="progress"><div class="bar" id="bar"></div></div>
-    <div class="progress-label" id="plabel">假期燃烧进度 0%</div>
-
-    <div class="divider"></div>
-    <div class="lore-title">— 时 空 观 测 报 告 —</div>
-    <p class="lore" id="lore"></p>
-    <div class="params" id="params"></div>
     <p class="target" id="target"></p>
 
+    <div class="meeting">
+      <div class="meeting-head"><span class="dot"></span>腾讯会议 · 加入通道</div>
+      <div class="meeting-row">
+        <span class="k">会议号</span>
+        <span class="v" id="meeting-id" title="点击复制">728-866-489</span>
+      </div>
+      <div class="meeting-row">
+        <span class="k">会议密码</span>
+        <span class="v" id="meeting-pw" title="点击复制">6767</span>
+      </div>
+      <a class="join" href="https://meeting.tencent.com/dm/cK93nPq2jMov" target="_blank" rel="noopener">一键入会 →</a>
+    </div>
+
     <div class="finished" id="finished">
-      <div class="finished-title">开学啦</div>
-      <div class="finished-sub">新学期已激活 · 祝君好运</div>
+      <div class="finished-big">已开始</div>
+      <p class="subtitle">点击上方按钮进入会议</p>
     </div>
   </main>
 
-  <script>
-    // ============ 核心：开学时间（北京时间，绝对时间戳，任意时区正确） ============
-    var TARGET = new Date('2026-09-01T07:20:00+08:00').getTime();
-    var START  = new Date('2026-08-01T00:00:00+08:00').getTime(); // 假期燃烧进度起点
+  <div class="toast" id="toast">已复制</div>
 
-    var el = {
-      d: document.getElementById('d'),
-      h: document.getElementById('h'),
-      m: document.getElementById('m'),
-      s: document.getElementById('s'),
-      countdown: document.getElementById('countdown'),
-      finished: document.getElementById('finished'),
-      precise: document.getElementById('precise'),
-      bar: document.getElementById('bar'),
-      plabel: document.getElementById('plabel'),
-      lore: document.getElementById('lore'),
-      params: document.getElementById('params'),
-      target: document.getElementById('target')
-    };
+<script>
+  // ===== 在这里修改目标时间（北京时间） =====
+  var TARGET = new Date('2026-10-06T19:30:00+08:00').getTime();
 
-    // 开学时间展示
-    el.target.textContent = '开学锚点  ' + new Intl.DateTimeFormat('zh-CN', {
-      timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric',
-      weekday: 'long', hour: '2-digit', minute: '2-digit', hour12: false
-    }).format(TARGET) + '（北京时间 UTC+8）';
+  var dEl = document.getElementById('d');
+  var hEl = document.getElementById('h');
+  var mEl = document.getElementById('m');
+  var sEl = document.getElementById('s');
+  var targetEl = document.getElementById('target');
+  var countdownEl = document.getElementById('countdown');
+  var finishedEl = document.getElementById('finished');
 
-    function pad(n, len) { return String(n).padStart(len, '0'); }
+  targetEl.textContent = '目标时间  ' + new Intl.DateTimeFormat('zh-CN', {
+    timeZone: 'Asia/Shanghai', year: 'numeric', month: 'long', day: 'numeric',
+    weekday: 'long', hour: '2-digit', minute: '2-digit', hour12: false
+  }).format(TARGET) + '（北京时间）';
 
-    function fmt(n) { return n.toLocaleString('en-US'); }
+  function pad(n) { return String(n).padStart(2, '0'); }
 
-    // ============ 故弄玄虚的观测报告（轮换） ============
-    var LORE = [
-      '时空锚点已锁定，参数经由宇宙公证处公证，恕不退还、无法撤销。',
-      '每一个消失的秒都坠入了事件视界，从此一去不复返。',
-      '本倒计时遵循狭义相对论：只要你跑得足够快，时间确实会慢。',
-      '量子态秒针已被观测，请勿眨眼，否则波函数将发生坍缩。',
-      '据不可靠来源，9 月 1 日凌晨将出现一次「作业黑洞」奇观。',
-      '暑假余额已被冻结，并自动转入「新学期」专项账户。',
-      '此处的每一秒均经过三重加密：防篡改、防作弊、防熬夜。',
-      '时间管理局提示：剩余额度不多，且用且珍惜。',
-      '正在与北斗卫星同步原子钟……同步完成，理论误差 ±0 秒。',
-      '温柔提醒：睡不够的话，开学只是你梦里的一个坏结局。'
-    ];
-    var loreIdx = 0;
-    el.lore.textContent = LORE[0];
-    setInterval(function () {
-      loreIdx = (loreIdx + 1) % LORE.length;
-      el.lore.style.opacity = '0';
-      setTimeout(function () {
-        el.lore.textContent = LORE[loreIdx];
-        el.lore.style.opacity = '1';
-      }, 400);
-    }, 4000);
+  function tick() {
+    var remain = Math.max(0, TARGET - Date.now());
+    var totalSec = Math.floor(remain / 1000);
+    var days = Math.floor(totalSec / 86400);
+    var hours = Math.floor((totalSec % 86400) / 3600);
+    var minutes = Math.floor((totalSec % 3600) / 60);
+    var seconds = totalSec % 60;
 
-    // ============ 倒计时主循环 ============
-    function tick() {
-      var now = Date.now();
-      var remain = Math.max(0, TARGET - now);
-      var totalSec = Math.floor(remain / 1000);
+    dEl.textContent = pad(days);
+    hEl.textContent = pad(hours);
+    mEl.textContent = pad(minutes);
+    sEl.textContent = pad(seconds);
 
-      var days = Math.floor(totalSec / 86400);
-      var hours = Math.floor((totalSec % 86400) / 3600);
-      var minutes = Math.floor((totalSec % 3600) / 60);
-      var seconds = totalSec % 60;
-
-      el.d.textContent = days;
-      el.h.textContent = pad(hours, 2);
-      el.m.textContent = pad(minutes, 2);
-
-      if (el.s.textContent !== pad(seconds, 2)) {
-        el.s.textContent = pad(seconds, 2);
-        el.s.classList.remove('tick');
-        void el.s.offsetWidth;
-        el.s.classList.add('tick');
-      }
-
-      // 精确剩余（故弄玄虚的毫秒级精度）
-      var preciseSec = (remain / 1000).toFixed(3);
-      el.precise.textContent = '精确剩余 ' + fmt(Math.floor(remain)) + ' 毫秒' +
-        '  ·  ' + preciseSec + ' 秒';
-
-      // 假期燃烧进度
-      var p = Math.min(100, Math.max(0, (now - START) / (TARGET - START) * 100));
-      el.bar.style.width = p.toFixed(2) + '%';
-      el.plabel.textContent = '假期燃烧进度 ' + p.toFixed(2) + '%';
-
-      // 观测参数
-      el.params.innerHTML =
-        '<span>剩余微秒 <b>' + fmt(remain * 1000) + '</b></span>' +
-        '<span>熵增速率 <b>恒定</b></span>' +
-        '<span>平行宇宙同步 <b>失败·重试中</b></span>';
-
-      if (remain <= 0) {
-        el.countdown.style.display = 'none';
-        el.precise.style.display = 'none';
-        document.querySelector('.progress').style.display = 'none';
-        document.getElementById('plabel').style.display = 'none';
-        document.querySelector('.divider').style.display = 'none';
-        document.querySelector('.lore-title').style.display = 'none';
-        el.lore.style.display = 'none';
-        el.params.style.display = 'none';
-        el.target.style.display = 'none';
-        el.finished.style.display = 'block';
-      }
+    if (remain <= 0) {
+      countdownEl.style.display = 'none';
+      targetEl.style.display = 'none';
+      finishedEl.style.display = 'block';
     }
+  }
 
-    tick();
-    setInterval(tick, 250);
+  tick();
+  setInterval(tick, 1000);
 
-    // ============ 星空粒子 + 流星 ============
-    var c = document.getElementById('stars');
-    var ctx = c.getContext('2d');
-    var stars = [], meteors = [];
-
-    function resize() { c.width = window.innerWidth; c.height = window.innerHeight; }
-    window.addEventListener('resize', resize);
-    resize();
-
-    for (var i = 0; i < 200; i++) {
-      stars.push({
-        x: Math.random() * c.width,
-        y: Math.random() * c.height,
-        r: Math.random() * 1.4 + 0.2,
-        a: Math.random(),
-        tw: Math.random() * 0.03 + 0.006,
-        vy: Math.random() * 0.25 + 0.04
-      });
+  // ===== 点击复制会议号 / 密码 =====
+  var toast = document.getElementById('toast');
+  var toastTimer;
+  function copyText(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
     }
-
-    function spawnMeteor() {
-      meteors.push({
-        x: Math.random() * c.width,
-        y: Math.random() * c.height * 0.4,
-        vx: -(Math.random() * 7 + 5),
-        vy: Math.random() * 3 + 2,
-        life: 1
-      });
-    }
-    setInterval(spawnMeteor, 2400);
-
-    function loop() {
-      ctx.clearRect(0, 0, c.width, c.height);
-
-      for (var i = 0; i < stars.length; i++) {
-        var st = stars[i];
-        st.y += st.vy;
-        st.a += st.tw;
-        if (st.y > c.height) { st.y = 0; st.x = Math.random() * c.width; }
-        var alpha = 0.4 + Math.abs(Math.sin(st.a)) * 0.6;
-        ctx.beginPath();
-        ctx.arc(st.x, st.y, st.r, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,' + alpha.toFixed(2) + ')';
-        ctx.fill();
-      }
-
-      for (var j = meteors.length - 1; j >= 0; j--) {
-        var mt = meteors[j];
-        mt.x += mt.vx;
-        mt.y += mt.vy;
-        mt.life -= 0.012;
-        if (mt.life <= 0) { meteors.splice(j, 1); continue; }
-        var grad = ctx.createLinearGradient(mt.x, mt.y, mt.x - mt.vx * 8, mt.y - mt.vy * 8);
-        grad.addColorStop(0, 'rgba(255,255,255,' + mt.life + ')');
-        grad.addColorStop(1, 'rgba(168,85,247,0)');
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(mt.x, mt.y);
-        ctx.lineTo(mt.x - mt.vx * 8, mt.y - mt.vy * 8);
-        ctx.stroke();
-      }
-
-      requestAnimationFrame(loop);
-    }
-    loop();
-
-    // ============ 鼠标光晕跟随 ============
-    var aura = document.getElementById('aura');
-    document.addEventListener('mousemove', function (e) {
-      aura.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px)';
-    });
-  </script>
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toast.classList.remove('show'); }, 1600);
+  }
+  document.getElementById('meeting-id').addEventListener('click', function () {
+    copyText('728-866-489');
+  });
+  document.getElementById('meeting-pw').addEventListener('click', function () {
+    copyText('6767');
+  });
+</script>
 </body>
 </html>
